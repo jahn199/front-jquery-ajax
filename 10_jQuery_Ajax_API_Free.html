@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>멸종동물</h1>
+<button id="loadAnimal">멸종동물 정보 가져오기</button>
+<div id="extinctAnimal"></div>
+<script>
+    $('#loadAnimal').click(function (){
+
+       $.ajax({
+        url:`https://extinct-api.herokuapp.com/api/v1/animal/`,
+        method:'GET',
+        success:function (information){//본래는 data이나 api의 첫번째 목차가 data로 시작하기에 다른 단어를 넣어 작동되게끔 만듬
+            const animal = information.data[0];//위에 작성된걸 변수명으로 만들고 데이터를 가지고 오게 함
+            $('#extinctAnimal').html(`<div class="animalInfo">
+               <img src="${animal.imageSrc}"/>
+               <h2>이름 : ${animal.commonName}</h2>
+               <p>서식지 : ${animal.location}</p>
+               <p>마지막 기록 : ${animal.lastRecord}</p>
+               <p>정보 : ${animal.shortDesc}</p>
+           </div>`)
+        },
+        error:function (){
+            alert("데이터를 불러오는데 실패했습니다.");
+        }
+       })
+    })
+</script>
+</body>
+</html>
